@@ -24,28 +24,44 @@ const Portfolio: React.FC = () => {
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault?.();
   
-    const data = new FormData();
-    data.append("form-name", "contact");
-    data.append("firstName", formData.firstName);
-    data.append("lastName", formData.lastName);
-    data.append("email", formData.email);
-    data.append("message", formData.message);
+    // (optional) client-side validation
+    if (!formData.firstName || !formData.lastName || !formData.message) {
+      alert("Please fill in all required fields");
+      return;
+    }
+  
+    // URL-encode body per Netlify docs
+    const body = new URLSearchParams({
+      "form-name": "contact",
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      message: formData.message,
+    }).toString();
   
     try {
-      await fetch("/", {
+      const res = await fetch("/", {
         method: "POST",
-        body: data,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
       });
+  
+      if (!res.ok) {
+        // Helpful debug info if something is off (e.g., 404/405 when wrong path)
+        const text = await res.text().catch(() => "");
+        console.error("Netlify submit failed:", res.status, text);
+        alert("❌ Submission failed. Please try again.");
+        return;
+      }
   
       alert("✅ Message sent! Thanks for reaching out.");
       setFormData({ firstName: "", lastName: "", email: "", message: "" });
     } catch (err) {
-      alert("❌ Something went wrong. Please try again.");
       console.error(err);
+      alert("❌ Network error. Please try again.");
     }
   };
   
-
   return (
     <div className="min-h-screen bg-[#0a0b1e] text-white relative overflow-hidden">
       {/* Animated Background */}
@@ -496,13 +512,7 @@ const Portfolio: React.FC = () => {
 
         {/* Contact Section */ }
         {/* Hidden Netlify form setup */}
-  <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="contact" />
-    <input name="firstName" />
-    <input name="lastName" />
-    <input name="email" />
-    <textarea name="message" />
-  </form>
+
   <section id="contact" className="py-20 px-6">
     <div className="max-w-3xl mx-auto">
       <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-8">
