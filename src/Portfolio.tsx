@@ -496,13 +496,13 @@ const Portfolio: React.FC = () => {
 
         {/* Contact Section */ }
         {/* Hidden Netlify form setup */}
-      <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
-        <input type="hidden" name="form-name" value="contact" />
-        <input name="firstName" />
-        <input name="lastName" />
-        <input name="email" />
-        <textarea name="message" />
-      </form>
+  <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact" />
+    <input name="firstName" />
+    <input name="lastName" />
+    <input name="email" />
+    <textarea name="message" />
+  </form>
   <section id="contact" className="py-20 px-6">
     <div className="max-w-3xl mx-auto">
       <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-2xl p-8">
